@@ -1,0 +1,38 @@
+import pandas as pd
+from sklearn.model_selection import train_test_split
+from sklearn.linear_model import LinearRegression
+from sklearn.metrics import mean_squared_error
+
+# Load data
+df = pd.read_csv('weather_data.csv')
+
+# Preprocess data
+df['date'] = pd.to_datetime(df['date'])
+df = df.set_index('date')
+
+# Split data into training and testing sets
+X_train, X_test, y_train, y_test = train_test_split(df.drop('temperature', axis=1), df['temperature'], test_size=0.2, random_state=42)
+
+# Create and train a Linear Regression model
+model = LinearRegression()
+model.fit(X_train, y_train)
+
+# Make predictions on the test set
+y_pred = model.predict(X_test)
+
+# Evaluate the model
+mse = mean_squared_error(y_test, y_pred)
+print(f'Mean Squared Error: {mse:.2f}')
+
+# Use the model to make predictions for future dates
+future_dates = pd.date_range(start='2024-07-01', end='2024-07-31')
+future_data = pd.DataFrame(index=future_dates, columns=['humidity', 'wind_speed'])
+future_data = future_data.reset_index()
+future_data['humidity'] = 60  # assumed humidity value
+future_data['wind_speed'] = 10  # assumed wind speed value
+
+future_pred = model.predict(future_data.drop('index', axis=1))
+
+# Output the predicted temperatures for future dates
+print('Predicted Temperatures:')
+print(pd.DataFrame({'date': future_dates, 'temperature': future_pred}))
