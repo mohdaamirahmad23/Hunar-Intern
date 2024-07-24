@@ -1,0 +1,33 @@
+# Define a dictionary of rules
+rules = {
+    "hello": "Hi there! How can I help you today?",
+    "hi": "Hello! What can I do for you?",
+    "how are you": "I'm just a bot, but I'm doing great! How about you?",
+    "what is your name": "I'm a chatbot created by OpenAI. What's your name?",
+    "bye": "Goodbye! Have a great day!",
+    "thanks": "You're welcome! If you have any other questions, feel free to ask.",
+    "default": "I'm sorry, I didn't understand that. Could you please rephrase?"
+}
+
+def get_response(user_input):
+    # Convert the user input to lowercase
+    user_input = user_input.lower()
+    # Iterate through the rules dictionary
+    for key, value in rules.items():
+        # If the user input matches a key in the rules dictionary
+        if key in user_input:
+            return value
+    # If no match is found, return the default response
+    return rules["default"]
+
+# Main loop for the chatbot
+while True:
+    # Get user input
+    user_input = input("You: ")
+    # Get the chatbot's response
+    response = get_response(user_input)
+    # Print the response
+    print("Chatbot:", response)
+    # Exit the loop if the user says 'bye'
+    if "bye" in user_input:
+        break
